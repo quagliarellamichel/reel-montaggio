@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- Cornice dei reel 1080x1920 (o 1920x1080 per lo spot, classe "orizzontale"), renderizzata in PNG da capture.py (Playwright, sfondo trasparente).
+     La finestra del browser ha un "buco" trasparente dove il montaggio mette il video.
+     Geometria: deve combaciare con FINESTRA in montaggio.py. -->
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "PJS"; src: url("PlusJakartaSans-Bold.ttf"); font-weight: 100 900; }
+  /* Colori della palette (valori di default = verde-smeraldo); componi() li sovrascrive */
+  :root { --sfondo1: #313d3b; --sfondo2: #2a3331; --sfondo3: #1f2726; --accento: #3ddc84;
+          --testo-chip: #0f2a1c; --hook: #ffffff; }
+  html, body { margin: 0; width: 1080px; height: 1920px; background: transparent; overflow: hidden; }
+  #sfondo {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(900px 700px at 18% 6%, color-mix(in srgb, var(--accento) 16%, transparent), transparent 60%),
+      radial-gradient(800px 900px at 95% 100%, color-mix(in srgb, var(--accento) 10%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--sfondo1) 0%, var(--sfondo2) 45%, var(--sfondo3) 100%);
+  }
+  #chip {
+    position: absolute; top: 96px; left: 0; right: 0; margin: auto; width: max-content;
+    font: 700 26px "PJS", sans-serif; letter-spacing: 3px; color: var(--testo-chip);
+    background: var(--accento); padding: 10px 22px; border-radius: 999px;
+  }
+  #hook {
+    position: absolute; top: 168px; left: 70px; right: 70px; height: 230px;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font: 800 76px/1.12 "PJS", sans-serif; color: var(--hook); white-space: pre-line;
+  }
+  #barra {
+    position: absolute; border-radius: 28px 28px 0 0; background: #eef1f0;
+    display: flex; align-items: center; gap: 12px; padding: 0 24px; box-sizing: border-box;
+  }
+  .pallino { width: 16px; height: 16px; border-radius: 50%; }
+  #url {
+    margin-left: 18px; flex: 1; height: 38px; border-radius: 19px; background: #fff;
+    font: 600 22px "PJS", sans-serif; color: #5b6664; display: flex; align-items: center; padding-left: 20px;
+  }
+  #ombra { position: absolute; border-radius: 28px; box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 0 0 2px rgba(255,255,255,.08); }
+  #firma {
+    position: absolute; bottom: 44px; left: 0; right: 0; text-align: center;
+    font: 700 26px "PJS", sans-serif; color: rgba(255,255,255,.55); letter-spacing: 1px;
+  }
+  /* Spot 16:9 "desktop": chip, hook e firma in colonna a sinistra, finestra a destra
+     (geometria FINESTRA_ORIZZONTALE in montaggio.py), sottotitoli sotto la finestra */
+  body.orizzontale { width: 1920px; height: 1080px; }
+  .orizzontale #chip { top: 250px; left: 80px; right: auto; margin: 0; font-size: 22px; }
+  .orizzontale #hook { top: 320px; left: 80px; right: auto; width: 460px; height: auto; display: block;
+                       text-align: left; font-size: 60px; }
+  .orizzontale #firma { bottom: 90px; left: 80px; right: auto; text-align: left; font-size: 24px; }
+</style>
+</head>
+<body>
+<div id="ombra"></div>
+<div id="sfondo"></div>
+<div id="chip">NOVITÀ</div>
+<div id="hook"></div>
+<div id="barra">
+  <span class="pallino" style="background:#ff5f57"></span>
+  <span class="pallino" style="background:#febc2e"></span>
+  <span class="pallino" style="background:#28c840"></span>
+  <span id="url">🔒 app.example.com</span>
+</div>
+<div id="firma">example.com · prova gratis 30 giorni</div>
+<script>
+  // Chiamata da render.py: disegna finestra e buco trasparente con la geometria di montaggio.py
+  // e colori della palette.
+  window.componi = ({ hook, chip, x, y, w, h, barra, raggio, palette, orizzontale }) => {
+    if (chip) document.getElementById('chip').textContent = chip;
+    document.body.classList.toggle('orizzontale', !!orizzontale);
+    if (palette) {
+      const r = document.documentElement.style;
+      palette.sfondo.forEach((c, i) => r.setProperty(`--sfondo${i + 1}`, c));
+      r.setProperty('--accento', palette.accento);
+      r.setProperty('--testo-chip', palette.testo_chip);
+      r.setProperty('--hook', palette.hook);
+    }
+    document.getElementById('hook').textContent = hook;
+    Object.assign(document.getElementById('barra').style, { left: x + 'px', top: y + 'px', width: w + 'px', height: barra + 'px' });
+    Object.assign(document.getElementById('ombra').style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px' });
+    // sfondo con un buco a rettangolo arrotondato (path evenodd) dove passa il video
+    const r = raggio, W = orizzontale ? 1920 : 1080, H = orizzontale ? 1080 : 1920;
+    const buco = `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}` +
+                 `H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'><path fill-rule='evenodd' d='M0 0H${W}V${H}H0Z ${buco}'/></svg>`;
+    const m = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+    const s = document.getElementById('sfondo').style;
+    s.webkitMaskImage = m; s.maskImage = m;
+    return document.fonts.ready.then(() => true);
+  };
+</script>
+</body>
+</html>

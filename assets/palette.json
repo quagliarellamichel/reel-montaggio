@@ -1,0 +1,17 @@
+[
+  {"nome": "verde-smeraldo", "sfondo": ["#313d3b", "#2a3331", "#1f2726"], "accento": "#3ddc84",
+   "testo_chip": "#0f2a1c", "hook": "#ffffff", "card_fondo": "#2a3331", "card_valore": "#3ddc84",
+   "card_nota": "#f5c400", "contorno_sub": "#2a3d31"},
+  {"nome": "blu-mare", "sfondo": ["#26394a", "#1f2f3d", "#16222d"], "accento": "#4db6ff",
+   "testo_chip": "#0b2236", "hook": "#ffffff", "card_fondo": "#1f2f3d", "card_valore": "#6cc4ff",
+   "card_nota": "#ffd166", "contorno_sub": "#1b3550"},
+  {"nome": "arancio-tramonto", "sfondo": ["#3f3129", "#342822", "#261d18"], "accento": "#ff9a3d",
+   "testo_chip": "#3a1a00", "hook": "#ffffff", "card_fondo": "#342822", "card_valore": "#ffae5c",
+   "card_nota": "#ffe08a", "contorno_sub": "#4a2a14"},
+  {"nome": "terracotta", "sfondo": ["#3d302c", "#332825", "#261e1b"], "accento": "#e07a5f",
+   "testo_chip": "#2b0f07", "hook": "#ffffff", "card_fondo": "#332825", "card_valore": "#f2a489",
+   "card_nota": "#f4d35e", "contorno_sub": "#4a2519"},
+  {"nome": "viola-sera", "sfondo": ["#352f45", "#2c273a", "#211d2c"], "accento": "#b28dff",
+   "testo_chip": "#1f0f40", "hook": "#ffffff", "card_fondo": "#2c273a", "card_valore": "#c7abff",
+   "card_nota": "#ffd166", "contorno_sub": "#3a2a5a"}
+]
